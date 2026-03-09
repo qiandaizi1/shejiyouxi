@@ -266,6 +266,7 @@
       transition: opacity .2s ease;
     }
     #note.show { opacity: 1; }
+    #mobileTicker { display: none; }
     .hint {
       position: absolute;
       left: 12px;
@@ -506,11 +507,17 @@
         border-radius: 10px;
         background: rgba(6, 14, 27, .64);
       }
-      .hud-box:first-child { width: min(28vw, 132px); }
-      .hud-box:last-child {
-        width: min(19vw, 90px);
-        padding-right: 34px;
+      .hud-box:first-child {
+        width: min(21vw, 102px);
       }
+      .hud-box:first-child .stats { display: none; }
+      .hud-box:last-child {
+        width: min(18vw, 82px);
+        padding-right: 32px;
+      }
+      .hud-box:last-child .stats { margin-top: 0; }
+      .hud-box:last-child .stats > div:nth-child(3),
+      .hud-box:last-child .stats > div:nth-child(4) { display: none; }
       .bars { gap: 4px; }
       .row {
         gap: 4px;
@@ -534,6 +541,31 @@
         bottom: calc(env(safe-area-inset-bottom) + 8px);
       }
       .desktop-hint { display: none; }
+      #mobileTicker {
+        display: flex;
+        position: absolute;
+        left: 50%;
+        bottom: calc(env(safe-area-inset-bottom) + 10px);
+        transform: translateX(-50%);
+        gap: 6px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(145, 204, 255, .12);
+        background: rgba(6, 14, 27, .58);
+        backdrop-filter: blur(8px);
+        max-width: min(56vw, 360px);
+        white-space: nowrap;
+      }
+      #mobileTicker span {
+        color: var(--muted);
+        font-size: .52rem;
+        letter-spacing: .04em;
+      }
+      #mobileTicker strong {
+        color: var(--text);
+        font-size: .64rem;
+        margin-left: 2px;
+      }
       .touch-label { display: none; }
       #movePad,
       #aimPad {
@@ -687,7 +719,7 @@
       #gameover .statbox strong { font-size: 1.18rem; }
       #touchControls.show .touch-btn { display: flex; }
     }
-    @media (pointer: coarse) and (orientation: landscape) {
+    @media (max-width: 900px) and (orientation: landscape) {
       #menu .panel,
       #pause .panel,
       #upgrade .panel,
@@ -714,9 +746,7 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
       }
-      #menu .menu-side .card:last-child {
-        grid-column: 1 / -1;
-      }
+      #menu .menu-side .card:last-child { display: none; }
       #menu .menu-side .card {
         min-width: 0;
       }
@@ -745,7 +775,14 @@
         justify-content: space-between;
       }
       #upgrade .upgrade-card h3 { font-size: .9rem; }
-      #upgrade .upgrade-card p { font-size: .72rem; line-height: 1.42; }
+      #upgrade .upgrade-card p {
+        font-size: .72rem;
+        line-height: 1.42;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
       #upgrade .key {
         min-width: 24px;
         height: 24px;
@@ -755,7 +792,7 @@
       #upgrade button { min-height: 38px; font-size: .8rem; }
       #gameover .grid2 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
-    @media (pointer: coarse) and (orientation: portrait) {
+    @media (max-width: 900px) and (orientation: portrait) {
       #menu .actions { grid-template-columns: 1fr; }
       #menu .menu-side { display: grid; grid-template-columns: 1fr; }
       .rotate-card {
@@ -766,18 +803,25 @@
         justify-content: center;
       }
     }
-    @media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+    @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
       .panel {
         padding: 10px 11px;
         border-radius: 14px;
       }
       #hud { padding: calc(env(safe-area-inset-top) + 2px) 2px 4px 2px; }
-      .hud-box:first-child { width: 112px; }
-      .hud-box:last-child { width: 78px; padding-right: 30px; }
+      .hud-box:first-child { width: 84px; }
+      .hud-box:last-child { width: 66px; padding-right: 26px; }
       .row { font-size: .58rem; }
       .label { font-size: .39rem; }
       .value { font-size: .58rem; }
       .bar { height: 5px; }
+      #mobileTicker {
+        bottom: calc(env(safe-area-inset-bottom) + 6px);
+        gap: 5px;
+        padding: 3px 7px;
+      }
+      #mobileTicker span { font-size: .46rem; }
+      #mobileTicker strong { font-size: .56rem; }
       #movePad,
       #aimPad {
         width: 92px;
@@ -794,6 +838,9 @@
       }
       #menu h1 { font-size: 1.46rem; }
       #menu h1 span { margin-bottom: 6px; }
+      #menu .desc { display: none; }
+      #menu .menu-main { gap: 8px; }
+      #menu .menu-main .card:first-of-type { display: none; }
       #menu .desc,
       #menu .card p,
       #menu .card li,
@@ -802,6 +849,12 @@
         line-height: 1.34;
       }
       #menu .card { padding: 8px 10px; }
+      #menu .badge {
+        display: inline-flex;
+        padding: 4px 8px;
+        font-size: .64rem;
+      }
+      #menu .badge strong { font-size: .76rem; }
       #menu .difficulty button {
         min-height: 34px;
         font-size: .72rem;
@@ -825,7 +878,7 @@
         line-height: 1.34;
       }
       #upgrade .upgrade-card {
-        min-height: 136px;
+        min-height: 118px;
         padding: 9px;
       }
       #upgrade .upgrade-card h3 { font-size: .8rem; }
@@ -872,6 +925,12 @@
               <div><span class="label">最高分</span><span id="bestHudText" class="value">0</span></div>
             </div>
           </div>
+        </div>
+        <div id="mobileTicker">
+          <span>分数 <strong id="mScoreText">0</strong></span>
+          <span>击败 <strong id="mKillsText">0</strong></span>
+          <span>时间 <strong id="mTimeText">00:00</strong></span>
+          <span>连击 <strong id="mComboText">x1</strong></span>
         </div>
         <div id="note"></div>
         <div class="hint desktop-hint">电脑：WASD / 方向键移动，鼠标或空格 / J 射击。手机：左侧摇杆移动，右侧拖动瞄准，按钮释放技能与暂停。</div>
@@ -1008,14 +1067,21 @@
       const W = canvas.width, H = canvas.height;
       const SAVE_KEY = "neon-frontier-high-score";
       const RUN_SAVE_KEY = "neon-frontier-run-save-v2";
+      const query = new URLSearchParams(location.search);
+      const debugScene = query.get("scene");
+      const debugTouch = query.get("touch") === "1";
       const hud = $("hud"), note = $("note"), difficultyButtons = [...document.querySelectorAll("#difficulty button")];
       const hudBarLabels = [...document.querySelectorAll("#hud .bars strong")];
       const continueBtn = $("continueBtn");
       const touchControls = $("touchControls");
       const rotateHint = $("rotateHint");
+      const mobileScoreText = $("mScoreText");
+      const mobileKillsText = $("mKillsText");
+      const mobileTimeText = $("mTimeText");
+      const mobileComboText = $("mComboText");
       const movePad = $("movePad"), moveStick = $("moveStick");
       const aimPad = $("aimPad"), aimStick = $("aimStick");
-      const touchMode = matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
+      const touchMode = debugTouch || matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
       const keys = new Set(), mouse = { x: W / 2, y: H / 2, down: false, inside: false };
       const touch = {
         enabled: touchMode,
@@ -1041,14 +1107,14 @@
         boss: { cost: 0, hp: 760, spd: 52, r: 56, score: 2200, dmg: 22, c: "#ff4f86" }
       };
       const UPGRADES = [
-        { name: "过载弹芯", desc: "基础伤害 +6，适合压制重甲单位。", apply: p => p.dmg += 6 },
-        { name: "高频炮管", desc: "主武器冷却减少 16%，持续火力更强。", apply: p => p.fireGap *= 0.84 },
-        { name: "推进器改装", desc: "移动速度 +32，躲避会轻松很多。", apply: p => p.spd += 32 },
-        { name: "战场整备", desc: "回复 28 点生命并提升 10 点最大生命。", apply: p => { p.maxHp += 10; p.hp = Math.min(p.maxHp, p.hp + 28); } },
+        { name: "过载弹芯", desc: "伤害 +6，压制重甲。", apply: p => p.dmg += 6 },
+        { name: "高频炮管", desc: "射击冷却 -16%。", apply: p => p.fireGap *= 0.84 },
+        { name: "推进器改装", desc: "移动速度 +32。", apply: p => p.spd += 32 },
+        { name: "战场整备", desc: "回复 28 点生命，最大生命 +10。", apply: p => { p.maxHp += 10; p.hp = Math.min(p.maxHp, p.hp + 28); } },
         { name: "散射矩阵", desc: "额外增加 1 发散射子弹。", apply: p => p.spread = Math.min(3, p.spread + 1) },
         { name: "穿透协议", desc: "子弹穿透次数 +1。", apply: p => p.pierce += 1 },
-        { name: "应急护盾", desc: "获得 1 层护盾，抵消一次受击。", apply: p => p.shield += 1 },
-        { name: "脉冲调谐", desc: "Q 技能冷却缩短 18%，范围提升。", apply: p => { p.pulseMax *= 0.82; p.pulseR += 18; } }
+        { name: "应急护盾", desc: "获得 1 层护盾。", apply: p => p.shield += 1 },
+        { name: "脉冲调谐", desc: "脉冲冷却 -18%，范围更大。", apply: p => { p.pulseMax *= 0.82; p.pulseR += 18; } }
       ];
 
       const S = {
@@ -1093,6 +1159,32 @@
         touchControls.classList.toggle("show", touch.enabled && S.scene === "run" && !mobilePortrait);
         rotateHint.classList.toggle("show", touch.enabled && mobilePortrait);
         syncHudText();
+      }
+      function applyDebugScene() {
+        if (!debugScene) return;
+        if (debugScene === "menu") {
+          setScene("menu");
+          return;
+        }
+        resetGame();
+        if (debugScene === "pause") {
+          setScene("pause");
+          return;
+        }
+        if (debugScene === "upgrade") {
+          renderUpgradeChoices(UPGRADES.slice(0, 3));
+          setScene("upgrade");
+          return;
+        }
+        if (debugScene === "gameover") {
+          S.score = 8450;
+          S.kills = 73;
+          S.t = 215;
+          S.wave = 9;
+          S.bestCombo = 12;
+          updateHud();
+          gameOver();
+        }
       }
       function resetTouchInput() {
         touch.moveId = null;
@@ -1257,6 +1349,10 @@
         $("waveText").textContent = S.wave;
         $("levelText").textContent = S.upgrades;
         $("bestHudText").textContent = S.best;
+        mobileScoreText.textContent = S.score;
+        mobileKillsText.textContent = S.kills;
+        mobileTimeText.textContent = timeStr(S.t);
+        mobileComboText.textContent = `x${S.combo}`;
       }
       function resetGame() {
         S.t = 0; S.score = 0; S.kills = 0; S.wave = 0; S.combo = 1; S.bestCombo = 1; S.comboT = 0; S.upgrades = 0;
@@ -1315,10 +1411,7 @@
         S.event = { type, t: type === "meteor" ? 8 : 9, tick: 0 };
         notice(type === "meteor" ? "战场事件：流星暴雨" : "战场事件：猎杀号角", 1.8);
       }
-      function openUpgrade() {
-        if (S.scene !== "run") return;
-        const pool = [...UPGRADES], choices = [];
-        while (choices.length < 3 && pool.length) choices.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+      function renderUpgradeChoices(choices) {
         S.choices = choices;
         const grid = $("upgradeGrid");
         grid.innerHTML = "";
@@ -1328,6 +1421,12 @@
           div.innerHTML = `<h3><span class="key">${i + 1}</span>${u.name}</h3><p>${u.desc}</p><button data-up="${i}">选择强化</button>`;
           grid.appendChild(div);
         });
+      }
+      function openUpgrade() {
+        if (S.scene !== "run") return;
+        const pool = [...UPGRADES], choices = [];
+        while (choices.length < 3 && pool.length) choices.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+        renderUpgradeChoices(choices);
         setScene("upgrade");
       }
       function applyUpgrade(i) {
@@ -1818,6 +1917,7 @@
       syncBest();
       updateContinueButton();
       initBg();
+      applyDebugScene();
       syncMobileUi();
       requestAnimationFrame(loop);
     })();

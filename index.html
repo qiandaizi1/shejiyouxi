@@ -380,7 +380,7 @@
     #rotateHint {
       position: absolute;
       inset: 0;
-      z-index: 5;
+      z-index: 8;
       display: none;
       align-items: center;
       justify-content: center;
@@ -393,6 +393,72 @@
       backdrop-filter: blur(8px);
     }
     #rotateHint.show { display: flex; }
+    .rotate-card {
+      width: min(100%, 520px);
+      padding: 28px 24px;
+      border-radius: 26px;
+      border: 1px solid rgba(151, 207, 255, 0.24);
+      background: linear-gradient(180deg, rgba(10, 21, 39, .96), rgba(5, 12, 25, .96));
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .38);
+    }
+    .rotate-icon {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 18px;
+      border-radius: 26px;
+      border: 1px solid rgba(100, 245, 255, .22);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(100, 245, 255, .24), transparent 52%),
+        linear-gradient(180deg, rgba(25, 45, 70, .95), rgba(11, 22, 38, .98));
+      position: relative;
+      box-shadow: inset 0 0 30px rgba(100, 245, 255, .08);
+    }
+    .rotate-icon::before,
+    .rotate-icon::after {
+      content: "";
+      position: absolute;
+      border-radius: 14px;
+      border: 2px solid rgba(237, 247, 255, .9);
+    }
+    .rotate-icon::before {
+      width: 24px;
+      height: 40px;
+      left: 22px;
+      top: 23px;
+    }
+    .rotate-icon::after {
+      width: 40px;
+      height: 24px;
+      right: 16px;
+      top: 31px;
+    }
+    .rotate-card h2 {
+      margin-bottom: 10px;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      letter-spacing: .08em;
+    }
+    .rotate-card p {
+      color: var(--muted);
+      line-height: 1.72;
+      margin: 0 auto;
+      max-width: 420px;
+    }
+    .rotate-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .rotate-badges span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(145, 204, 255, .16);
+      background: rgba(8, 18, 32, .62);
+      color: #d9ebff;
+      font-size: .86rem;
+      letter-spacing: .04em;
+    }
     @media (max-width: 980px) {
       .menu, .grid2, .upgrade-grid, .difficulty { grid-template-columns: 1fr; }
       .panel { padding: 22px; }
@@ -400,8 +466,8 @@
     @media (pointer: coarse), (max-width: 900px) {
       #app { padding: 0; }
       #wrap {
-        width: min(100vw, calc(100dvh * 16 / 9));
-        height: min(100dvh, calc(100vw * 9 / 16));
+        width: 100vw;
+        height: 100dvh;
         max-width: none;
         max-height: 100dvh;
         aspect-ratio: auto;
@@ -427,36 +493,37 @@
       }
       #hud {
         padding:
-          calc(env(safe-area-inset-top) + 6px)
-          calc(env(safe-area-inset-right) + 6px)
+          calc(env(safe-area-inset-top) + 4px)
+          calc(env(safe-area-inset-right) + 4px)
           calc(env(safe-area-inset-bottom) + 6px)
-          calc(env(safe-area-inset-left) + 6px);
+          calc(env(safe-area-inset-left) + 4px);
       }
-      .top { gap: 8px; }
+      .top { gap: 6px; }
       .hud-box {
         width: auto;
         max-width: none;
-        padding: 7px 8px;
-        border-radius: 12px;
+        padding: 5px 6px;
+        border-radius: 10px;
+        background: rgba(6, 14, 27, .64);
       }
-      .hud-box:first-child { width: min(40vw, 158px); }
+      .hud-box:first-child { width: min(28vw, 132px); }
       .hud-box:last-child {
-        width: min(27vw, 124px);
-        padding-right: 42px;
+        width: min(19vw, 90px);
+        padding-right: 34px;
       }
-      .bars { gap: 6px; }
+      .bars { gap: 4px; }
       .row {
-        gap: 6px;
-        font-size: .74rem;
+        gap: 4px;
+        font-size: .62rem;
       }
       .stats {
-        grid-template-columns: repeat(2, minmax(58px, 1fr));
-        gap: 3px 7px;
-        margin-top: 8px;
+        grid-template-columns: repeat(2, minmax(38px, 1fr));
+        gap: 2px 5px;
+        margin-top: 6px;
       }
-      .label { font-size: .54rem; }
-      .value { font-size: .78rem; }
-      .bar { height: 8px; }
+      .label { font-size: .42rem; }
+      .value { font-size: .64rem; }
+      .bar { height: 6px; }
       #note {
         top: calc(env(safe-area-inset-top) + 8px);
         padding: 6px 10px;
@@ -492,65 +559,70 @@
         width: 38px;
         height: 38px;
       }
-      #menu .panel { width: 100%; }
+      #menu .panel {
+        width: 100%;
+        overflow: hidden;
+      }
       #menu .menu {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 10px;
       }
       #menu .menu-main { display: grid; gap: 12px; }
-      #menu h1 { font-size: clamp(1.7rem, 7vw, 2.8rem); }
+      #menu h1 { font-size: clamp(1.56rem, 5.4vw, 2.32rem); }
       #menu .desc {
         margin-top: 0 !important;
-        font-size: .9rem;
-        line-height: 1.68;
+        font-size: .82rem;
+        line-height: 1.55;
       }
       #menu .card {
         margin-top: 0;
-        padding: 12px 14px;
-        border-radius: 16px;
+        padding: 10px 12px;
+        border-radius: 14px;
       }
       #menu .card p,
       #menu .card li {
-        font-size: .82rem;
-        line-height: 1.62;
+        font-size: .74rem;
+        line-height: 1.5;
       }
       #menu .card h3 {
-        margin-bottom: 6px;
-        font-size: .82rem;
+        margin-bottom: 4px;
+        font-size: .76rem;
       }
-      #menu .menu-side { gap: 10px; }
+      #menu .menu-side { gap: 8px; }
       #menu .difficulty {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-        margin-top: 10px;
+        gap: 6px;
+        margin-top: 8px;
       }
       #menu .difficulty button {
-        min-height: 44px;
-        padding: 10px 8px;
-        font-size: .88rem;
+        min-height: 38px;
+        padding: 8px 6px;
+        font-size: .78rem;
       }
       #menu .actions {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+        gap: 8px;
         margin-top: 0;
       }
       #menu .actions button {
         width: 100%;
-        min-height: 46px;
+        min-height: 40px;
+        font-size: .84rem;
       }
       #menu .badge {
         margin-top: 0;
         width: fit-content;
         max-width: 100%;
-        font-size: .86rem;
+        padding: 8px 12px;
+        font-size: .76rem;
       }
-      #menu .badge strong { font-size: 1rem; }
+      #menu .badge strong { font-size: .92rem; }
       #menu .sub {
         margin-top: 0 !important;
-        font-size: .82rem;
-        line-height: 1.55;
+        font-size: .74rem;
+        line-height: 1.46;
       }
       #pause .pause-panel,
       #upgrade .upgrade-panel,
@@ -584,23 +656,23 @@
       }
       #upgrade .upgrade-grid {
         grid-template-columns: 1fr;
-        gap: 10px;
-        margin-top: 16px;
+        gap: 8px;
+        margin-top: 12px;
       }
       #upgrade .upgrade-card {
-        padding: 13px;
-        border-radius: 14px;
+        padding: 11px;
+        border-radius: 12px;
       }
       #upgrade .upgrade-card h3 {
         display: flex;
         align-items: center;
-        font-size: 1rem;
+        font-size: .92rem;
       }
       #upgrade .upgrade-card p {
         min-height: 0;
-        margin: 8px 0 12px;
-        font-size: .84rem;
-        line-height: 1.6;
+        margin: 6px 0 10px;
+        font-size: .74rem;
+        line-height: 1.48;
       }
       #gameover .grid2 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -622,32 +694,147 @@
       #gameover .panel {
         margin: auto;
       }
+      #menu .menu-panel {
+        width: min(100%, 1180px);
+        max-height: calc(100dvh - 18px);
+        padding: 12px;
+        overflow: hidden;
+      }
+      #menu .menu {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+        gap: 10px;
+        align-items: start;
+      }
+      #menu .menu-main,
       #menu .menu-side {
-        display: flex;
-        overflow-x: auto;
-        padding-bottom: 4px;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
+        align-content: start;
       }
-      #menu .menu-side::-webkit-scrollbar { display: none; }
+      #menu .menu-side {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      #menu .menu-side .card:last-child {
+        grid-column: 1 / -1;
+      }
       #menu .menu-side .card {
-        flex: 0 0 min(46vw, 260px);
-        min-width: min(46vw, 260px);
-        scroll-snap-align: start;
+        min-width: 0;
       }
+      #menu .menu-main .card:last-of-type { margin-bottom: 0; }
+      #menu h1 { font-size: clamp(1.72rem, 4vw, 2.66rem); }
+      #menu .desc { font-size: .76rem; line-height: 1.42; }
+      #menu .card p,
+      #menu .card li { font-size: .7rem; line-height: 1.38; }
+      #menu .actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #menu .sub { display: none; }
       #pause .actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      #upgrade .upgrade-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      #upgrade .upgrade-panel {
+        width: min(100%, 1160px);
+        max-height: calc(100dvh - 18px);
+        padding: 12px;
+        overflow: hidden;
+      }
+      #upgrade .upgrade-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
       #upgrade .upgrade-card {
-        min-height: 192px;
+        min-height: 158px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
       }
+      #upgrade .upgrade-card h3 { font-size: .9rem; }
+      #upgrade .upgrade-card p { font-size: .72rem; line-height: 1.42; }
+      #upgrade .key {
+        min-width: 24px;
+        height: 24px;
+        margin-right: 6px;
+        font-size: .8rem;
+      }
+      #upgrade button { min-height: 38px; font-size: .8rem; }
       #gameover .grid2 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (pointer: coarse) and (orientation: portrait) {
       #menu .actions { grid-template-columns: 1fr; }
       #menu .menu-side { display: grid; grid-template-columns: 1fr; }
+      .rotate-card {
+        width: 100%;
+        min-height: min(72dvh, 520px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+    @media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+      .panel {
+        padding: 10px 11px;
+        border-radius: 14px;
+      }
+      #hud { padding: calc(env(safe-area-inset-top) + 2px) 2px 4px 2px; }
+      .hud-box:first-child { width: 112px; }
+      .hud-box:last-child { width: 78px; padding-right: 30px; }
+      .row { font-size: .58rem; }
+      .label { font-size: .39rem; }
+      .value { font-size: .58rem; }
+      .bar { height: 5px; }
+      #movePad,
+      #aimPad {
+        width: 92px;
+        height: 92px;
+      }
+      .touch-stick {
+        width: 38px;
+        height: 38px;
+      }
+      #pulseTouch {
+        width: 46px;
+        height: 46px;
+        bottom: calc(env(safe-area-inset-bottom) + 104px);
+      }
+      #menu h1 { font-size: 1.46rem; }
+      #menu h1 span { margin-bottom: 6px; }
+      #menu .desc,
+      #menu .card p,
+      #menu .card li,
+      #menu .sub {
+        font-size: .66rem;
+        line-height: 1.34;
+      }
+      #menu .card { padding: 8px 10px; }
+      #menu .difficulty button {
+        min-height: 34px;
+        font-size: .72rem;
+      }
+      #menu .actions button,
+      #upgrade button,
+      #pause button,
+      #gameover button {
+        min-height: 34px;
+        font-size: .74rem;
+      }
+      #upgrade h2,
+      #pause h2,
+      #gameover h2 {
+        font-size: 1.2rem;
+      }
+      #upgrade .sub,
+      #pause .sub,
+      #gameover .sub {
+        font-size: .72rem;
+        line-height: 1.34;
+      }
+      #upgrade .upgrade-card {
+        min-height: 136px;
+        padding: 9px;
+      }
+      #upgrade .upgrade-card h3 { font-size: .8rem; }
+      #upgrade .upgrade-card p { font-size: .66rem; line-height: 1.32; }
+      #gameover .statbox {
+        padding: 9px;
+      }
+      #gameover .statbox h3 { font-size: .72rem; }
+      #gameover .statbox strong { font-size: .98rem; }
     }
   </style>
 </head>
@@ -702,17 +889,28 @@
         <button id="pulseTouch" class="touch-btn secondary">Q</button>
         <button id="pauseTouch" class="touch-btn">II</button>
       </div>
-      <div id="rotateHint">菜单与结算页可竖屏查看。<br>进入战斗后建议横屏游玩，才能显示完整触控区。</div>
+      <div id="rotateHint">
+        <div class="rotate-card">
+          <div class="rotate-icon"></div>
+          <h2>请横屏开始</h2>
+          <p>手机端已按横屏布局重做。旋转设备后才会显示完整首页、升级界面和战斗触控区。</p>
+          <div class="rotate-badges">
+            <span>横屏进入游戏</span>
+            <span>完整触控区</span>
+            <span>单屏菜单与升级</span>
+          </div>
+        </div>
+      </div>
 
       <div id="menu" class="overlay">
         <div class="panel menu-panel">
           <div class="menu">
             <div class="menu-main">
               <h1><span>Arcade Survival</span>霓虹防线</h1>
-              <p class="desc" style="margin-top:16px;">驾驶实验型战机顶住敌潮。现在已经同时适配桌面键鼠和手机触控：首页、升级弹窗、暂停、结算都做了移动端布局，本地最高分和续玩进度也会保存在当前设备。</p>
+              <p class="desc" style="margin-top:16px;">顶住敌潮、清空波次、击破 Boss。支持桌面键鼠与手机横屏触控，最高分和续玩进度会自动保存在当前设备。</p>
               <div class="card">
                 <h3>游戏目标</h3>
-                <p>清空每一波敌军并不断强化机体。敌人类型会逐步增加，战场还会触发流星暴雨或猎杀号角。生命值归零即失败，每 4 波会出现 Boss。</p>
+                <p>清空每一波敌军并强化机体。敌人会逐步升级，生命归零即失败，每 4 波出现 Boss。</p>
               </div>
               <div class="card">
                 <h3>难度选择</h3>
@@ -744,14 +942,14 @@
                 <h3>战斗要点</h3>
                 <ul>
                   <li>敌人包含追击、冲锋、远程、重甲和 Boss</li>
-                  <li>击杀有几率掉落修复包、护盾、超载火力</li>
-                  <li>受击后存在短暂无敌与闪烁反馈</li>
-                  <li>连击越高，得分加成越高</li>
+                  <li>击杀可能掉落修复包、护盾和超载火力</li>
+                  <li>受击后有短暂无敌和闪烁反馈</li>
+                  <li>连击越高，得分倍率越高</li>
                 </ul>
               </div>
               <div class="card">
                 <h3>额外内容</h3>
-                <p>已实现波次系统、Boss、技能冷却、升级三选一、暂停菜单、屏幕震动、随机战场装饰、多种敌人 AI 与结算称号。</p>
+                <p>包含波次、Boss、技能冷却、升级三选一、暂停菜单、屏幕震动和多种敌人 AI。</p>
               </div>
             </div>
           </div>
@@ -773,7 +971,7 @@
       <div id="upgrade" class="overlay hidden">
         <div class="panel upgrade-panel">
           <h2 class="center">升级三选一</h2>
-          <p class="sub center" style="margin-top:10px;">波次完成。选择一项强化后继续推进。可按 1 / 2 / 3 快速选择。</p>
+          <p class="sub center" style="margin-top:10px;">波次完成，选择一项强化后继续推进。可按 1 / 2 / 3 快速选择。</p>
           <div id="upgradeGrid" class="upgrade-grid"></div>
         </div>
       </div>
@@ -893,7 +1091,7 @@
       function syncMobileUi() {
         const mobilePortrait = touch.enabled && window.innerHeight > window.innerWidth;
         touchControls.classList.toggle("show", touch.enabled && S.scene === "run" && !mobilePortrait);
-        rotateHint.classList.toggle("show", touch.enabled && S.scene === "run" && mobilePortrait);
+        rotateHint.classList.toggle("show", touch.enabled && mobilePortrait);
         syncHudText();
       }
       function resetTouchInput() {

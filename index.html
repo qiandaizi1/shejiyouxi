@@ -334,7 +334,10 @@
       touch-action: none;
     }
     #movePad { left: 16px; }
-    #aimPad { right: 16px; }
+    #aimPad {
+      right: 16px;
+      display: none;
+    }
     .touch-stick {
       position: absolute;
       left: 50%;
@@ -370,7 +373,7 @@
       touch-action: none;
       font-weight: 800;
     }
-    #pulseTouch { bottom: 158px; }
+    #pulseTouch { bottom: 34px; }
     #pauseTouch {
       top: 14px;
       right: 14px;
@@ -567,23 +570,21 @@
         margin-left: 2px;
       }
       .touch-label { display: none; }
-      #movePad,
-      #aimPad {
+      #movePad {
         width: 104px;
         height: 104px;
         bottom: calc(env(safe-area-inset-bottom) + 8px);
       }
       #movePad { left: calc(env(safe-area-inset-left) + 10px); }
-      #aimPad { right: calc(env(safe-area-inset-right) + 10px); }
       .touch-stick {
         width: 44px;
         height: 44px;
       }
       #pulseTouch {
         right: calc(env(safe-area-inset-right) + 18px);
-        bottom: calc(env(safe-area-inset-bottom) + 122px);
-        width: 52px;
-        height: 52px;
+        bottom: calc(env(safe-area-inset-bottom) + 24px);
+        width: 60px;
+        height: 60px;
       }
       #pauseTouch {
         top: calc(env(safe-area-inset-top) + 8px);
@@ -822,8 +823,7 @@
       }
       #mobileTicker span { font-size: .46rem; }
       #mobileTicker strong { font-size: .56rem; }
-      #movePad,
-      #aimPad {
+      #movePad {
         width: 92px;
         height: 92px;
       }
@@ -832,9 +832,9 @@
         height: 38px;
       }
       #pulseTouch {
-        width: 46px;
-        height: 46px;
-        bottom: calc(env(safe-area-inset-bottom) + 104px);
+        width: 52px;
+        height: 52px;
+        bottom: calc(env(safe-area-inset-bottom) + 16px);
       }
       #menu h1 { font-size: 1.46rem; }
       #menu h1 span { margin-bottom: 6px; }
@@ -933,7 +933,7 @@
           <span>连击 <strong id="mComboText">x1</strong></span>
         </div>
         <div id="note"></div>
-        <div class="hint desktop-hint">电脑：WASD / 方向键移动，鼠标或空格 / J 射击。手机：左侧摇杆移动，右侧拖动瞄准，按钮释放技能与暂停。</div>
+        <div class="hint desktop-hint">电脑：WASD / 方向键移动，系统自动攻击最近目标，Q 释放脉冲。手机：左摇杆移动，Q 技能，右上角暂停。</div>
       </div>
 
       <div id="touchControls">
@@ -941,9 +941,9 @@
           <div id="moveStick" class="touch-stick"></div>
           <div class="touch-label">移动</div>
         </div>
-        <div id="aimPad" class="touch-zone">
+        <div id="aimPad" class="touch-zone" aria-hidden="true">
           <div id="aimStick" class="touch-stick"></div>
-          <div class="touch-label">拖动瞄准 / 自动开火</div>
+          <div class="touch-label">自动射击</div>
         </div>
         <button id="pulseTouch" class="touch-btn secondary">Q</button>
         <button id="pauseTouch" class="touch-btn">II</button>
@@ -955,7 +955,7 @@
           <p>手机端已按横屏布局重做。旋转设备后才会显示完整首页、升级界面和战斗触控区。</p>
           <div class="rotate-badges">
             <span>横屏进入游戏</span>
-            <span>完整触控区</span>
+            <span>移动 + 大招</span>
             <span>单屏菜单与升级</span>
           </div>
         </div>
@@ -991,8 +991,8 @@
                 <h3>操作说明</h3>
                 <ul>
                   <li>移动：WASD 或方向键</li>
-                  <li>射击：鼠标按住，或空格 / J</li>
-                  <li>手机：左摇杆移动，右侧拖动瞄准并自动开火</li>
+                  <li>射击：系统自动攻击最近敌机</li>
+                  <li>手机：左摇杆移动，系统自动射击</li>
                   <li>技能：Q 释放脉冲，清弹并击退近身敌人</li>
                   <li>暂停：P 或 ESC，可继续、重开、回主菜单</li>
                 </ul>
@@ -1287,12 +1287,29 @@
         if (isEasyLaneMode()) {
           return -Math.PI / 2;
         }
-        if (touch.enabled && touch.firing) {
-          return Math.atan2(touch.aimY, touch.aimX);
+        let target = null;
+        let bestDist = Infinity;
+        for (const enemy of S.enemies) {
+          if (enemy.dead) continue;
+          const dist = (enemy.x - player.x) ** 2 + (enemy.y - player.y) ** 2;
+          if (dist < bestDist) {
+            bestDist = dist;
+            target = enemy;
+          }
         }
-        const aimX = mouse.inside ? mouse.x - player.x : Math.cos(player.ang);
-        const aimY = mouse.inside ? mouse.y - player.y : Math.sin(player.ang);
-        return Math.atan2(aimY, aimX);
+        if (!target) {
+          for (const meteor of S.meteors) {
+            const dist = (meteor.x - player.x) ** 2 + (meteor.y - player.y) ** 2;
+            if (dist < bestDist) {
+              bestDist = dist;
+              target = meteor;
+            }
+          }
+        }
+        if (target) {
+          return Math.atan2(target.y - player.y, target.x - player.x);
+        }
+        return player.ang || -Math.PI / 2;
       }
       const rand = (a, b) => Math.random() * (b - a) + a;
       const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1573,13 +1590,13 @@
         my += touch.moveY;
         if (mx || my) {
           const l = Math.hypot(mx, my); mx /= l; my /= l; p.x += mx * p.spd * dt; p.y += my * p.spd * dt;
-          if (!mouse.inside && !touch.firing && !isEasyLaneMode()) p.ang = Math.atan2(my, mx);
+          if (!isEasyLaneMode()) p.ang = Math.atan2(my, mx);
         }
         if (isEasyLaneMode()) p.ang = -Math.PI / 2;
         p.x = clamp(p.x, 24, W - 24);
         p.y = clamp(p.y, isEasyLaneMode() ? H * .52 : 24, H - 24);
         p.fireCd = Math.max(0, p.fireCd - dt); p.inv = Math.max(0, p.inv - dt); p.flash = Math.max(0, p.flash - dt); p.rapid = Math.max(0, p.rapid - dt); p.pulseCd = Math.max(0, p.pulseCd - dt);
-        if ((mouse.down || touch.firing || keys.has("Space") || keys.has("KeyJ")) && p.fireCd <= 0) fire();
+        if (p.fireCd <= 0) fire();
       }
       function updateBullets(dt) {
         for (let i = S.bullets.length - 1; i >= 0; i--) {
@@ -1883,7 +1900,6 @@
       $("menuPauseBtn").addEventListener("click", () => { saveGameState(true); setScene("menu"); mouse.down = false; syncBest(); updateContinueButton(); });
       $("upgradeGrid").addEventListener("click", (e) => { const btn = e.target.closest("[data-up]"); if (btn) applyUpgrade(Number(btn.dataset.up)); });
       bindPad(movePad, moveStick, "move");
-      bindPad(aimPad, aimStick, "aim");
       $("pulseTouch").addEventListener("touchstart", (e) => { pulse(); e.preventDefault(); }, { passive: false });
       $("pauseTouch").addEventListener("touchstart", (e) => { togglePause(); e.preventDefault(); }, { passive: false });
       $("pulseTouch").addEventListener("click", pulse);
